@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fdsc.dao.DtpropertiesMapper" >
+    <resultMap id="BaseResultMap" type="com.fdsc.model.Dtproperties" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="objectid" property="objectid" jdbcType="INTEGER" />
+        <result column="property" property="property" jdbcType="VARCHAR" />
+        <result column="value" property="value" jdbcType="VARCHAR" />
+        <result column="uvalue" property="uvalue" jdbcType="VARCHAR" />
+        <result column="lvalue" property="lvalue" jdbcType="VARBINARY" />
+        <result column="version" property="version" jdbcType="NUMERIC" />
+    </resultMap>
+</mapper>

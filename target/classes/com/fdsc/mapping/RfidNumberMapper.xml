@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fdsc.dao.RfidNumberMapper" >
+    <resultMap id="BaseResultMap" type="com.fdsc.model.RfidNumber" >
+
+
+
+        <!--<result property="rfidf" column="RFIDF" jdbcType="VARCHAR" />-->
+        <result property="productName" column="品名" jdbcType="VARCHAR" />
+        <result property="color" column="颜色" jdbcType="VARCHAR" />
+        <result property="length" column="米数" jdbcType="DECIMAL" />
+        <!--<result property="outTime" column="出厂日期" jdbcType="TIMESTAMP" />-->
+        <!--<result property="dyeShopNumber" column="染厂编号" jdbcType="DECIMAL" />-->
+        <result property="outTime" column="日期" jdbcType="TIMESTAMP" />
+        <result property="dyeShopNumber" column="染厂订单号" jdbcType="VARCHAR" />
+        <result property="crockCountNumber" column="本缸总匹数" jdbcType="VARCHAR" />
+        <result property="assist" column="辅助名称" jdbcType="VARCHAR" />
+        <!--<result property="assist" column="辅助" jdbcType="VARCHAR" />-->
+     <result property="excelServerRCID" column="ExcelServerRCID" jdbcType="VARCHAR" />
+        <!--  <result property="excelServerRN" column="ExcelServerRN" jdbcType="INTEGER" />
+       <result property="excelServerCN" column="ExcelServerCN" jdbcType="INTEGER" />
+       <result property="excelServerRC1" column="ExcelServerRC1" jdbcType="VARCHAR" />
+       <result property="excelServerWIID" column="ExcelServerWIID" jdbcType="VARCHAR" />
+       <result property="excelServerRTID" column="ExcelServerRTID" jdbcType="VARCHAR" />
+       <result property="excelServerCHG" column="ExcelServerCHG" jdbcType="INTEGER" />-->
+        <!--<result property="status" column="状态" jdbcType="VARCHAR" />-->
+        <result property="status" column="销售状态" jdbcType="VARCHAR" />
+        <!--<result property="outGoingTime" column="出库日期" jdbcType="TIMESTAMP" />-->
+        <result property="storeroom" column="库房" jdbcType="VARCHAR" />
+        <result property="cylinderNumber" column="缸号" jdbcType="VARCHAR" />
+        <!--<result property="barCode" column="条形码" jdbcType="VARCHAR" />-->
+        <!--<result property="barCodeAssist" column="条形码辅助" jdbcType="VARCHAR" />-->
+        <result property="barCodeAssist" column="条形码" jdbcType="VARCHAR" />
+        <result property="shrinkage" column="缩率" jdbcType="VARCHAR" />
+        <result property="rfid" column="rfid" jdbcType="VARCHAR" />
+        <result property="frozenMan" column="冻结人" jdbcType="VARCHAR" />
+        <result property="startTime" column="起始时间" jdbcType="TIMESTAMP" />
+        <result property="endTime" column="截止时间" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <!--SELECT * FROM RFID编号_主表 where RFID = #{Rfid}-->
+    <select id="findByRfid"  resultMap="BaseResultMap">
+        SELECT * FROM 色坯进出库存匹_主表 where RFID = #{Rfid}
+    </select>
+    <!--SELECT * FROM RFID编号_主表 where 条形码辅助 = #{code}-->
+    <select id="findByCode"  resultMap="BaseResultMap">
+        SELECT * FROM 色坯进出库存匹_主表 where 条形码 = #{code}
+    </select>
+
+    <select id="findBySelectKctbmx"  resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        bmx.barcode,
+        bmx.设备名称 deviceName,
+        bmx.扫描时间 scanningTime,
+        bmx.订单编号 orderNo,
+        bmx.日期 timeKct,
+        bmx.品名 productName,
+        bmx.颜色 color,
+        bmx.米数 length,
+        bmx.缩率 shrinkage,
+        bmx.库房 storeroom,
+        bmx.冻结人 frozenMan,
+        bmx.ExcelServerRCID,
+        bmx.ExcelServerRN,
+        bmx.ExcelServerCN,
+        bmx.ExcelServerRC1,
+        bmx.ExcelServerWIID,
+        bmx.ExcelServerRTID,
+        bmx.ExcelServerCHG,
+        bmx.是否调拨 isAllocation,
+        bsi.起始日期 startTime,
+        bsi.截止日期 endTime,
+        bsi.当前用户 nowUser,
+        bsi.库房 storeroom2,
+        bsi.日期 timeBsi,
+        bsi.是否手填 isHandFilling,
+        bsi.调拨编号 allocationNo
+        FROM
+        kctbmx bmx
+        LEFT JOIN kctbsi bsi ON bsi.ExcelServerRCID = bmx.ExcelServerRCID
+        WHERE
+        1=1
+        <if test="productName!=null and productName!=''">
+             and bmx.品名 = #{productName}
+        </if>
+        <if test="color!=null and color!=''">
+              and bmx.颜色 = #{color}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            and bmx.扫描时间  &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and bmx.扫描时间 &lt;= #{endTime}
+        </if>
+        ORDER BY bmx.扫描时间 DESC
+    </select>
+    <select id="findBySelectSpckdmx"  resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        bmx.barcode,
+        bmx.设备名称 deviceName,
+        bmx.扫描时间 scanningTime,
+        bmx.订单编号 orderNo,
+        bmx.日期 timeKct,
+        bmx.品名 productName,
+        bmx.颜色 color,
+        bmx.米数 length,
+        bmx.缩率 shrinkage,
+        bmx.库房 storeroom,
+        bmx.冻结人 frozenMan,
+        bmx.ExcelServerRCID,
+        bmx.ExcelServerRN,
+        bmx.ExcelServerCN,
+        bmx.ExcelServerRC1,
+        bmx.ExcelServerWIID,
+        bmx.ExcelServerRTID,
+        bmx.ExcelServerCHG,
+        bmx.是否出库 isOut,
+        bmx.作废 cancellation,
+        bsi.起始日期 startTime,
+        bsi.截止日期 endTime,
+        bsi.是否手填 isHandFilling,
+        bsi.出库单号 outOrderNo
+        FROM
+        spckdmx bmx
+        LEFT JOIN spckdsi bsi ON bsi.ExcelServerRCID = bmx.ExcelServerRCID
+        WHERE
+        1=1
+        <if test="productName!=null and productName!=''">
+             and bmx.品名 = #{productName}
+        </if>
+        <if test="color!=null and color!=''">
+              and bmx.颜色 = #{color}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            and bmx.扫描时间  &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and bmx.扫描时间 &lt;= #{endTime}
+        </if>
+        ORDER BY bmx.扫描时间 DESC
+    </select>
+    <select id="findBySelectSettlement"  resultType="java.util.Map" parameterType="java.util.Map">
+           select
+        结算单号 settlementNo,
+        结算日期 settlementTime,
+        送货单号 deliveryNo,
+        送货日期 deliveryTime,
+        供应商名称 supplierName,
+        产品名称 productName,
+        送货匹数 numberOfDeliveries,
+        送货米数 deliveryMetres,
+        结帐匹数 numberOfCheckouts,
+        姆米 mmi,
+        备注 remarks,
+        ExcelServerRCID ,
+        ExcelServerRN ,
+        ExcelServerCN ,
+        ExcelServerRC1 ,
+        ExcelServerWIID ,
+        ExcelServerRTID ,
+        ExcelServerCHG ,
+        供应商编号 supplierNo,
+        产品编号 productNo,
+        价格 price,
+        是否含税 isIncludeTax ,
+        本供应商送货日期  deliverySupplierDate,
+        计数 countNum,
+        结账号 knotAccountNum,
+        所有供应商名 allSupplierName,
+        所有供应商编号 allSupplierNo,
+        调整价格 priceAdjustment
+        from 结算表_主表
+           <where>
+               <if test="productName !=null and productName != ''">
+                   and  产品名称  LIKE  #{productName}
+               </if>
+               <if test="startTime!=null and startTime!=''">
+                   and 送货日期  &gt;= #{startTime}
+               </if>
+               <if test="endTime!=null and endTime!=''">
+                   and 送货日期 &lt;= #{endTime}
+               </if>
+           </where>
+        order by 送货日期 desc
+    </select>
+</mapper>

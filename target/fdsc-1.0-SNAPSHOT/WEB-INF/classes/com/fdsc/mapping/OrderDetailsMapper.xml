@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fdsc.dao.OrderDetailsMapper" >
+    <resultMap id="BaseResultMap" type="com.fdsc.model.OrderDetails" >
+        <result column="面料名称" property="name" jdbcType="VARCHAR" />
+        <result column="颜色名称" property="color" jdbcType="VARCHAR" />
+        <result column="加工厂" property="factroy" jdbcType="VARCHAR" />
+        <result column="订单匹数" property="orderNumber" jdbcType="DECIMAL" />
+        <result column="订单日期" property="orderTime" jdbcType="TIMESTAMP" />
+        <result column="进厂米数" property="riceNumber" jdbcType="DECIMAL" />
+        <result column="实际出货日期" property="shippingDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="findByColor"  resultMap="BaseResultMap">
+      SELECT * FROM 订单明细表_主表 where  颜色名称 like  #{color,jdbcType=VARCHAR} or 面料名称 like  #{color,jdbcType=VARCHAR}
+      and 订单日期 between dateadd(DAY,-180,GETDATE()) and GETDATE()
+    </select>
+</mapper>

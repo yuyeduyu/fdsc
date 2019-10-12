@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fdsc.dao.RfidtempMainMapper">
+    <resultMap id="BaseResultMap" type="com.fdsc.model.RfidtempMain">
+        <result property="number" column="number" jdbcType="DECIMAL"/>
+        <result property="rfid" column="RFID" jdbcType="VARCHAR"/>
+        <result property="inout" column="INOUT" jdbcType="DECIMAL"/>
+        <result property="excelServerRCID" column="ExcelServerRCID" jdbcType="VARCHAR"/>
+        <result property="excelServerRN" column="ExcelServerRN" jdbcType="INTEGER"/>
+        <result property="excelServerCN" column="ExcelServerCN" jdbcType="INTEGER"/>
+        <result property="excelServerRC1" column="ExcelServerRC1" jdbcType="VARCHAR"/>
+        <result property="excelServerWIID" column="ExcelServerWIID" jdbcType="VARCHAR"/>
+        <result property="excelServerRTID" column="ExcelServerRTID" jdbcType="VARCHAR"/>
+        <result property="excelServerCHG" column="ExcelServerCHG" jdbcType="INTEGER"/>
+        <result property="yidu" column="YIDU" jdbcType="DECIMAL"/>
+        <result property="barcode" column="BARCODE" jdbcType="VARCHAR"/>
+        <result property="pancun" column="PANCUN" jdbcType="DECIMAL"/>
+        <result property="equInfor" column="EquInfor" jdbcType="VARCHAR"/>
+        <result property="state" column="State" jdbcType="VARCHAR"/>
+        <result property="invalid" column="Invalid" jdbcType="VARCHAR"/>
+        <result property="tbkc" column="TBKC" jdbcType="DECIMAL"/>
+        <result property="dongJ" column="DongJ" jdbcType="DECIMAL"/>
+        <result property="dJState" column="DJState" jdbcType="VARCHAR"/>
+        <result property="tBState" column="TBState" jdbcType="VARCHAR"/>
+        <result property="cKState" column="CKState" jdbcType="VARCHAR"/>
+        <result property="dateTime" column="datetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <update id="update" parameterType="java.util.List">
+        <foreach collection="rfIdList" item="item" index="index" open="" close="" separator=";">
+            UPDATE RFIDtemp_main
+            <set>
+                dateTime = getdate()
+                <if test="equInfor != null and equInfor != ''">
+                    ,EquInfor = #{equInfor}
+                </if>
+                <if test="status != null and status != ''">
+                    ,INOUT = #{status}
+                </if>
+                <if test="dongJ != null and dongJ != ''">
+                    ,DongJ = #{dongJ}
+                </if>
+                <if test="tbkc != null and tbkc != ''">
+                    ,TBKC = #{tbkc}
+                </if>
+            </set>
+            where RFID = '${item}'
+        </foreach>
+    </update>
+    <update id="updateCode" parameterType="java.util.List">
+        <foreach collection="codeList" item="item" index="index" open="" close="" separator=";">
+            UPDATE RFIDtemp_main
+            <set>
+                dateTime = getdate()
+                <if test="equInfor != null and equInfor != ''">
+                    ,EquInfor = #{equInfor}
+                </if>
+                <if test="status != null and status != ''">
+                    ,INOUT = #{status}
+                </if>
+                <if test="dongJ != null and dongJ != ''">
+                    ,DongJ = #{dongJ}
+                </if>
+                <if test="tbkc != null and tbkc != ''">
+                    ,TBKC = #{tbkc}
+                </if>
+            </set>
+            where BARCODE = '${item}'
+        </foreach>
+    </update>
+    <insert id="insert" parameterType="java.util.List">
+        insert into RFIDtemp_main (RFID,PANCUN,dateTime
+        <if test="equInfor != null and equInfor != ''">
+            ,EquInfor
+        </if>
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item},1,getdate()
+            <if test="equInfor != null and equInfor != ''">
+                ,#{equInfor}
+            </if>
+            )
+        </foreach>
+    </insert>
+    <insert id="insertCode" parameterType="java.util.List">
+        insert into RFIDtemp_main (BARCODE,PANCUN,dateTime
+        <if test="equInfor != null and equInfor != ''">
+            ,EquInfor
+        </if>
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item},1,getdate()
+            <if test="equInfor != null and equInfor != ''">
+                ,#{equInfor}
+            </if>
+            )
+        </foreach>
+    </insert>
+
+    <select id="findByRfid" resultMap="BaseResultMap">
+        SELECT * FROM RFIDtemp_main where RFID = #{Rfid}
+    </select>
+    <select id="findDjDetailsList">
+    SELECT * FROM RFIDtemp_main where RFID = #{Rfid}
+    </select>
+    <select id="findByCode" resultMap="BaseResultMap">
+        SELECT * FROM RFIDtemp_main where BARCODE = #{code}
+    </select>
+
+    <insert id="insertComing" parameterType="java.util.List">
+        insert into RFIDtemp_main (RFID,INOUT,dateTime,激活人)
+        values
+            (#{rfId},#{status},getdate(),#{equInfor})
+    </insert>
+    <insert id="insertCodeComing" parameterType="java.util.List">
+        insert into RFIDtemp_main (BARCODE,INOUT,dateTime
+        <if test="equInfor != null and equInfor != ''">
+            ,激活人
+        </if>
+        )
+        values
+        (#{code},#{status},getdate()
+        <if test="equInfor != null and equInfor != ''">
+            ,#{equInfor}
+        </if>
+        )
+    </insert>
+
+    <insert id="addEntity">
+        insert into RFIDtemp_main (
+        dateTime
+        <if test="code != null and code != ''">
+            ,BARCODE
+        </if>
+        <if test="rfId != null and rfId != ''">
+            ,RFID
+        </if>
+        <if test="status != null and status != ''">
+            ,INOUT
+        </if>
+        <if test="equInfor != null and equInfor != ''">
+            ,EquInfor
+        </if>
+        <if test="dongJ != null and dongJ != ''">
+            ,DongJ
+        </if>
+        <if test="tbkc != null and tbkc != ''">
+            ,TBKC
+        </if>
+        )
+        values(
+        getdate()
+        <if test="code != null and code != ''">
+            ,#{code}
+        </if>
+        <if test="rfId != null and rfId != ''">
+            ,#{rfId}
+        </if>
+        <if test="status != null and status != ''">
+            ,#{status}
+        </if>
+        <if test="equInfor != null and equInfor != ''">
+            ,#{equInfor}
+        </if>
+        <if test="dongJ != null and dongJ != ''">
+            , #{dongJ}
+        </if>
+        <if test="tbkc != null and tbkc != ''">
+            ,#{tbkc}
+        </if>
+        )
+    </insert>
+
+    <update id="editEntity">
+        UPDATE RFIDtemp_main
+        <set>
+            dateTime = getdate()
+            <if test="equInfor != null and equInfor != ''">
+                ,EquInfor = #{equInfor}
+            </if>
+            <if test="status != null and status != ''">
+                ,INOUT = #{status}
+            </if>
+            <if test="dongJ != null and dongJ != ''">
+                ,DongJ = #{dongJ}
+            </if>
+            <if test="tbkc != null and tbkc != ''">
+                ,TBKC = #{tbkc}
+            </if>
+        </set>
+        where 1=1
+        <if test="rfId != null and rfId != ''">
+            and RFID = '${rfId}'
+        </if>
+        <if test="code != null and code != ''">
+            and BARCODE = '${code}'
+        </if>
+    </update>
+</mapper>

@@ -109,12 +109,12 @@
         SELECT * FROM RFIDtemp_main where BARCODE = #{code}
     </select>
 
-    <insert id="insertComing" parameterType="java.util.List">
+    <insert id="activation" parameterType="java.util.List">
         insert into RFIDtemp_main (RFID,INOUT,dateTime,激活人)
         values
             (#{rfId},#{status},getdate(),#{equInfor})
     </insert>
-    <insert id="insertCodeComing" parameterType="java.util.List">
+    <insert id="activationCode" parameterType="java.util.List">
         insert into RFIDtemp_main (BARCODE,INOUT,dateTime
         <if test="equInfor != null and equInfor != ''">
             ,激活人
@@ -127,7 +127,24 @@
         </if>
         )
     </insert>
-
+    <insert id="insertComing" parameterType="java.util.List">
+        insert into RFIDtemp_main (RFID,INOUT,dateTime,EquInfor)
+        values
+            (#{rfId},#{status},getdate(),#{equInfor})
+    </insert>
+    <insert id="insertCodeComing" parameterType="java.util.List">
+        insert into RFIDtemp_main (BARCODE,INOUT,dateTime
+        <if test="equInfor != null and equInfor != ''">
+            ,EquInfor
+        </if>
+        )
+        values
+        (#{code},#{status},getdate()
+        <if test="equInfor != null and equInfor != ''">
+            ,#{equInfor}
+        </if>
+        )
+    </insert>
     <insert id="addEntity">
         insert into RFIDtemp_main (
         dateTime

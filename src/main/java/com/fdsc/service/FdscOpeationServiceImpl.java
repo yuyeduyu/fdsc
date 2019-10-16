@@ -204,7 +204,7 @@ public class FdscOpeationServiceImpl implements FdscOpeationService {
             map.put("rfid", rfid);
             try {
                 map.put("status", "1");
-                rfidtempMainMapper.insertComing(rfid, "2", equInfor);
+                rfidtempMainMapper.activation(rfid, "2", equInfor);
                 mapList.add(map);
             } catch (Exception e) {
                 map.put("status", "2");
@@ -236,7 +236,7 @@ public class FdscOpeationServiceImpl implements FdscOpeationService {
             map.put("code", code);
             try {
                 map.put("status", "1");
-                rfidtempMainMapper.insertCodeComing(code, "1", equInfor);
+                rfidtempMainMapper.activationCode(code, "2", equInfor);
                 mapList.add(map);
             } catch (Exception e) {
                 map.put("status", "2");
